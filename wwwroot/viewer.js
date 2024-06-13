@@ -1,3 +1,8 @@
+import './extensions/LoggerExtension.js';
+import './extensions/SummaryExtension.js';
+import './extensions/HistogramExtension.js';
+import './extensions/DataGridExtension.js';
+
 async function getAccessToken(callback) {
     try {
         const resp = await fetch('/api/auth/token');
@@ -7,15 +12,21 @@ async function getAccessToken(callback) {
         callback(access_token, expires_in);
     } catch (err) {
         alert('Could not obtain access token. See the console for more details.');
-        console.error(err);        
+        console.error(err);
     }
 }
 
 export function initViewer(container) {
     return new Promise(function (resolve, reject) {
-            Autodesk.Viewing.Initializer({ env: 'AutodeskProduction', getAccessToken }, function () {
+        Autodesk.Viewing.Initializer({ env: 'AutodeskProduction', getAccessToken }, function () {
             const config = {
-                extensions: ['Autodesk.DocumentBrowser']
+                extensions: [
+                    'Autodesk.DocumentBrowser',
+                    'LoggerExtension',
+                    'SummaryExtension',
+                    'HistogramExtension',
+                    'DataGridExtension',
+                ]
             };
             const viewer = new Autodesk.Viewing.GuiViewer3D(container, config);
             viewer.start();
