@@ -14,7 +14,9 @@ function createTreeNode(id, text, icon, children = false) {
 
 async function getHubs() {
     const hubs = await getJSON('/api/hubs');
-    return hubs.map(hub => createTreeNode(`hub|${hub.id}`, hub.attributes.name, 'icon-hub', true));
+    //TODO: Get back with the hubs name
+    //return hubs.map(hub => createTreeNode(`hub|${hub.id}`, hub.attributes.name, 'icon-hub', true));
+    return hubs.map(hub => createTreeNode(`hub|${hub.id}`, `AECOder`, 'icon-hub', true));
 }
 
 async function getProjects(hubId) {

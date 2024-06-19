@@ -1,3 +1,6 @@
+import './controllers/openaiController.js';
+import { createChatGPTModal } from './views/chatGPTWindow.js';
+
 import { initViewer, loadModel } from './viewer.js';
 import { initTree } from './sidebar.js';
 
@@ -17,8 +20,11 @@ try {
                 document.body.removeChild(iframe);
             };
         }
-        const viewer = await initViewer(document.getElementById('preview'));
-        initTree('#tree', (id) => loadModel(viewer, window.btoa(id).replace(/=/g, '')));
+        window.viewer = await initViewer(document.getElementById('preview'));
+        initTree('#tree', (id) => loadModel(window.btoa(id).replace(/=/g, '')));
+
+        createChatGPTModal();
+
     } else {
         login.innerText = 'Login';
         login.onclick = () => window.location.replace('/api/auth/login');

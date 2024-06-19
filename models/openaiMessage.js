@@ -1,4 +1,4 @@
-class OpenAIMessage {
+const OpenAIMessage = class OpenAIMessage {
 	constructor(role, message) {
 		this.role = role;
 		this.content = [{

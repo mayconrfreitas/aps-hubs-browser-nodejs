@@ -22,23 +22,23 @@ export function initViewer(container) {
             const config = {
                 extensions: [
                     'Autodesk.DocumentBrowser',
-                    'LoggerExtension',
-                    'SummaryExtension',
-                    'HistogramExtension',
-                    'DataGridExtension',
+                    // 'LoggerExtension',
+                    // 'SummaryExtension',
+                    // 'HistogramExtension',
+                    // 'DataGridExtension',
                 ]
             };
-            const viewer = new Autodesk.Viewing.GuiViewer3D(container, config);
-            viewer.start();
-            viewer.setTheme('light-theme');
-            resolve(viewer);
+            window.viewer = new Autodesk.Viewing.GuiViewer3D(container, config);
+            window.viewer.start();
+            window.viewer.setTheme('light-theme');
+            resolve(window.viewer);
         });
     });
 }
 
-export function loadModel(viewer, urn) {
+export function loadModel(urn) {
     function onDocumentLoadSuccess(doc) {
-        viewer.loadDocumentNode(doc, doc.getRoot().getDefaultGeometry());
+        window.viewer.loadDocumentNode(doc, doc.getRoot().getDefaultGeometry());
     }
     function onDocumentLoadFailure(code, message) {
         alert('Could not load model. See console for more details.');
