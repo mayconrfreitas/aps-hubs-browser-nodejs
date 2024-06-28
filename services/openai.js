@@ -251,6 +251,125 @@ const initialPrompt = new OpenAIMessage(Roles.SYSTEM,
 
         \`\`\`
 
+    6. user: "Retrieve the list of all my hubs."
+        system: "Retrieving the list of all your hubs..."
+        \`\`\`javascript
+        function listHubs() {
+            //const url = 'https://developer.api.autodesk.com/aec/graphql';
+            //const headers = {
+            //    "Authorization": "Bearer " + window.access_token,
+            //    "Content-Type": "application/json"
+            //};
+            //const body = {
+            //    query: \`{
+            //                hubs {
+            //                    results {
+            //                    name
+            //                    }
+            //                }
+            //            }\`
+            //};
+
+            //fetch(url, {
+            //    method: 'POST',
+            //    headers: headers,
+            //    body: JSON.stringify(body)
+            //})
+            //.then(response => response.json())
+            //.then(data => {
+            //    const hubs = data.data.hubs.results;
+            //    appendMessage('bot', 'Here is the list of your hubs:');
+            //    hubs.forEach(hub => {
+            //        appendMessage('bot', hub.name);
+            //    });
+            //    addSystemMessageToHistory('Here is the list of your hubs:');
+            //    hubs.forEach(hub => {
+            //        addSystemMessageToHistory(hub.name);
+            //    });
+            //})
+            //.catch(error => {
+            //    console.error('An error occurred while listing hubs:', error);
+            //    appendMessage('bot', 'An error occurred while listing hubs. Please try again.');
+            //    addSystemMessageToHistory('An error occurred while listing hubs. Please try again.');
+            //});
+
+            const url = 'https://developer.api.autodesk.com/project/v1/hubs';
+            const headers = {
+                "Authorization": "Bearer " + window.access_token
+            };
+
+            fetch(url, {
+                method: 'GET',
+                headers: headers
+            })
+            .then(response => response.json())
+            .then(data => {
+                const hubs = data.data;
+                window.Hubs = hubs;
+                appendMessage('bot', 'Here is the list of your hubs:');
+                let count = 1;
+                hubs.forEach(hub => {
+                    appendMessage('bot', count + '. ' + hub.name);
+                });
+                addSystemMessageToHistory('Here is the list of your hubs:');
+                count = 1;
+                hubs.forEach(hub => {
+                    addSystemMessageToHistory(count + '. ' + hub.name);
+                    count++;
+                });
+            })
+            .catch(error => {
+                console.error('An error occurred while listing hubs:', error);
+                appendMessage('bot', 'An error occurred while listing hubs. Please try again.');
+                addSystemMessageToHistory('An error occurred while listing hubs. Please try again.');
+            });
+        }
+
+        listHubs();
+        \`\`\`
+
+    6. user: "List the projects in the hub named 'AECOder'."
+        system: "Listing the projects in the hub named 'AECOder'..."
+        \`\`\`javascript
+        function listProjects() {
+
+            const hubId = window.Hubs.find(hub => hub.name === 'AECOder').id;
+            const url = \`https://developer.api.autodesk.com/project/v1/hubs/\${hubId}/projects\`;
+            const headers = {
+                "Authorization": "Bearer " + window.access_token
+            };
+
+            fetch(url, {
+                method: 'GET',
+                headers: headers
+            })
+            .then(response => response.json())
+            .then(data => {
+                const projects = data.data;
+                appendMessage('bot', "Here is the list of projects in the hub 'AECOder':");
+                let count = 1;
+                projects.forEach(project => {
+                    appendMessage('bot', count + '. ' + project.name);
+                    count++;
+                });
+                addSystemMessageToHistory("Here is the list of projects in the hub 'AECOder':");
+                count = 1;
+                projects.forEach(project => {
+                    addSystemMessageToHistory(count + '. ' + project.name);
+                    count++;
+                });
+
+            })
+            .catch(error => {
+                console.error('An error occurred while listing projects:', error);
+                appendMessage('bot', 'An error occurred while listing projects. Please try again.');
+                addSystemMessageToHistory('An error occurred while listing projects. Please try again.');
+            });
+        }
+
+        listProjects();
+        \`\`\`
+
     Now, respond to the following user instruction:
     user: `
 );

@@ -11,6 +11,7 @@ const service = module.exports = {};
 service.getAuthorizationUrl = () => authenticationClient.authorize(APS_CLIENT_ID, ResponseType.Code, APS_CALLBACK_URL, [
     Scopes.DataRead,
     Scopes.DataCreate,
+    Scopes.DataWrite,
     Scopes.ViewablesRead
 ]);
 
@@ -20,7 +21,7 @@ service.authCallbackMiddleware = async (req, res, next) => {
     });
     const publicCredentials = await authenticationClient.getRefreshToken(APS_CLIENT_ID, internalCredentials.refresh_token, {
         clientSecret: APS_CLIENT_SECRET,
-        scopes: [Scopes.ViewablesRead]
+        scopes: [Scopes.ViewablesRead, Scopes.DataRead, Scopes.DataCreate, Scopes.DataWrite]
     });
     req.session.public_token = publicCredentials.access_token;
     req.session.internal_token = internalCredentials.access_token;

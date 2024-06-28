@@ -9,6 +9,7 @@ async function getAccessToken(callback) {
         if (!resp.ok)
             throw new Error(await resp.text());
         const { access_token, expires_in } = await resp.json();
+        window.access_token = access_token;
         callback(access_token, expires_in);
     } catch (err) {
         alert('Could not obtain access token. See the console for more details.');
